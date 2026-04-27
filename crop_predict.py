@@ -5,7 +5,7 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
     
 # Load model
-model = load_model("crop_classifier_model.keras")
+model = load_model("crop_classifier_model.h5")
 
 # Load class mapping
 with open("crop_class_indices.json") as f:
