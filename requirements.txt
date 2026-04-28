@@ -1,4 +1,4 @@
 gradio
 tensorflow
 numpy
-pillow 
+pillow  
