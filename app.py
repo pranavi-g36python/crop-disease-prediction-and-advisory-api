@@ -45,4 +45,4 @@ iface = gr.Interface(
     description="Upload a leaf image to detect crop type and disease"
 )
 
-iface.launch(server_name="0.0.0.0", server_port=7860)
+iface.launch()
