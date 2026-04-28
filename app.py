@@ -45,4 +45,4 @@ iface = gr.Interface(
     description="Upload a leaf image to detect crop type and disease"
 )
 
-iface.launch(ssr_mode=False)
+iface.launch(ssr_mode=False, show_error=True)
