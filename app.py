@@ -1,11 +1,8 @@
-from fastapi import FastAPI, File, UploadFile
+import gradio as gr
 import shutil
-import os
 
 from crop_predict import predict_crop
 from disease_predict import predict_disease
-
-app = FastAPI()
 
 # Advice dictionary
 advice_dict = {
@@ -15,17 +12,11 @@ advice_dict = {
     "healthy": "Crop is healthy"
 }
 
-@app.get("/")
-def home():
-    return {"message": "Crop Disease Prediction API"}
-
-@app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+def predict(image):
     file_path = "temp.jpg"
 
-    # Save uploaded file
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    # Save uploaded image
+    shutil.copy(image, file_path)
 
     # Predictions
     crop, crop_conf = predict_crop(file_path)
@@ -38,9 +29,20 @@ async def predict(file: UploadFile = File(...)):
     else:
         advice = advice_dict.get(disease.lower(), "Monitor crop")
 
-    return {
-        "crop": crop,
-        "confidence": float(crop_conf),
-        "disease": disease,
-        "advice": advice
-    }
+    return f"""
+🌱 Crop: {crop}
+📊 Confidence: {crop_conf}%
+🦠 Disease: {disease}
+💡 Advice: {advice}
+"""
+
+# Gradio UI
+iface = gr.Interface(
+    fn=predict,
+    inputs=gr.Image(type="filepath"),
+    outputs="text",
+    title="🌿 Crop Disease Prediction System",
+    description="Upload a leaf image to detect crop type and disease"
+)
+
+iface.launch()
